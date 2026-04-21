@@ -1,4 +1,6 @@
 import sqlite3
+import time
+
 
 def empty_db():
       connection = sqlite3.connect('example.db')
@@ -8,8 +10,10 @@ def empty_db():
       connection.commit()
       #account_id = cursor.lastrowid
       connection.close()
+      return "emptied"
 
 def create_account(name, initial_balance):
+      print("-------Create-Account-------")
       connection = sqlite3.connect('example.db')
       cursor = connection.cursor()
 
@@ -26,6 +30,7 @@ def create_account(name, initial_balance):
       return account_id
 
 def deposit(account_id, amount):
+    print("-------Deposit-------")
     connection = sqlite3.connect('example.db')
     cursor = connection.cursor()
 
@@ -38,16 +43,19 @@ def deposit(account_id, amount):
     cursor.execute('''
         INSERT INTO transactions (transaction_type, amount, account_num)
         VALUES (?,?,?)
-    ''', ("withdraw", amount, account_id))
+    ''', ("deposit", amount, account_id))
 
-    if cursor.rowcount == 0:
-        print('Account not found')
+    if cursor.rowcount < account_id or account_id < 1:
+        connection.commit()
+        connection.close()
+        return('Account not found')
     else:
-        print(f"Deposited {amount} into account ID {account_id}")
-    connection.commit()
-    connection.close()
+        connection.commit()
+        connection.close()
+        return(f"Deposited {amount} into account ID {account_id}")
 
 def withdraw(account_id, amount):
+    print("-------Withdraw-------")
     connection = sqlite3.connect('example.db')
     cursor = connection.cursor()
 
@@ -57,34 +65,42 @@ def withdraw(account_id, amount):
 
     result = cursor.fetchone()
     if result is None:
-        print("Account not found.")
+        return("Account not found.")
     else:
         balance = result[0]
         if balance < amount:
-            print('Insufficient funds.')
+            connection.commit()
+            connection.close()
+            return('Insufficient funds.')
         else:
             cursor.execute('''
                 UPDATE accounts 
                 SET balance = balance - ?
                 WHERE id = ?
             ''', (amount, account_id))
-            print(f"Withdrew {amount} from account ID {account_id}")
-    connection.commit()
-    connection.close()
+            cursor.execute('''
+                INSERT INTO transactions (transaction_type, amount, account_num)
+                VALUES (?,?,?)
+            ''', ("withdrawl", amount, account_id))
+            connection.commit()
+            connection.close()
+            return(f"Withdrew {amount} from account ID {account_id}")
+
 
 def view():
+    print("-------View-------")
     connection = sqlite3.connect('example.db')
     cursor = connection.cursor()
-    print("Fetching accounts with a balance greater than 0...")
+    print("Fetching accounts...(id, name, balance)")
     results = cursor.execute('''
-        SELECT * FROM accounts WHERE balance > 0
+        SELECT * FROM accounts 
     ''')
 
     print("Results:")
     for row in results:
         print(row)
 
-    print("Fetching transactions...")
+    print("Fetching transactions...(transaction id, amount, user id)")
     results = cursor.execute('''
         SELECT * FROM transactions
     ''')
@@ -95,6 +111,7 @@ def view():
     connection.commit()
     #account_id = cursor.lastrowid
     connection.close()
+    return "viewed"
     
 
 def main():
@@ -110,7 +127,7 @@ def main():
     empty_db()
     turn_on = True
     while(turn_on):
-        print("---Banking--Admin--App---\n1. Create an account\n2. Deposit\n3. Withdraw\n4. view accounts")
+        print("---Banking--Admin--App---\n1. Create an account\n2. Deposit\n3. Withdraw\n4. view accounts and transactions\n5. exit")
         choice = input('Enter the corresponding number to choose an action: ')
         if choice == '1':
             A_name = input('Enter account name: ')
@@ -119,13 +136,19 @@ def main():
         elif choice == '2':
             A_id = int(input('Enter account id: '))
             A_amount = int(input('Enter deposit amount: '))
-            deposit(A_id, A_amount)
+            print(deposit(A_id, A_amount))
         elif choice == '3':
             A_id = int(input('Enter account id: '))
             A_amount = int(input('Enter withdraw amount: '))
-            withdraw(A_id, A_amount)
+            print(withdraw(A_id, A_amount))
         elif choice == '4':
             view()
+        elif choice == '5':
+            quit()
+        else:
+            print('invalid input...enter an integer from the menu above')
+        time.sleep(3)
+        
 
 
 

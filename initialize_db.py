@@ -29,14 +29,14 @@ def initialize_database():
     # Insert sample data
     cursor.execute("DELETE FROM transactions")
     cursor.execute("DELETE FROM accounts")
-    print("Inserting sample data...")
-    cursor.execute('''
-        INSERT INTO accounts (name, balance) VALUES
-        ('Alice', 0),
-        ('Bob', 0),
-        ('Charlie', 0)
-    ''')
-    print("Sample data inserted.")
+    #print("Inserting sample data...")
+    #cursor.execute('''
+        #INSERT INTO accounts (name, balance) VALUES
+        #('Alice', 0),
+        #('Bob', 0),
+        #('Charlie', 0)
+    #''')
+    #print("Sample data inserted.")
     # Commit the changes and close the connection
     print("Committing changes and closing the connection...")
     connection.commit()

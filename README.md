@@ -1,5 +1,18 @@
 # Python SQLite Project
+Quickstart setup:
+type 'python initialize_db.py' in terminal
+type 'python main.py' in terminal
+Follow the instructions for user input given by the command line interface
 
+NOTE: for testing purposes I set the program to reset the accounts and transaction table each time it is run...to keep the table short and clear for testing each time the program is run. To remove this simply remove the call to empty_db()
+
+Feature list:
+
+-Account creation 
+-Depositing/Withdraw money from accounts
+-View account balances and changes to said balances
+
+Description:
 This project is a simple Python application that interacts with an SQLite database. It serves as a demonstration of how to set up a Python project with SQLite and includes basic functionality for database operations.
 
 ## Setup Instructions
