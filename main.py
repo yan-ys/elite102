@@ -118,7 +118,7 @@ def numInput(prompt):
         user_input = input(prompt)
         try:
             value = int(user_input)
-            return value
+            return user_input
         except:
             print('Invalid input...please enter a numerical value')
 
@@ -136,7 +136,7 @@ def main():
     empty_db()
     turn_on = True
     while(turn_on):
-        print("---Banking--Admin--App---\n1. Create an account\n2. Deposit\n3. Withdraw\n4. view accounts and transactions\n5. exit")
+        print("\n---Banking--Admin--App---\n1. Create an account\n2. Deposit\n3. Withdraw\n4. view accounts and transactions\n5. exit")
         choice = input('Enter the corresponding number to choose an action: ')
         if choice == '1':
             A_name = input('Enter account name: ')
