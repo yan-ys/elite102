@@ -113,6 +113,15 @@ def view():
     connection.close()
     return "viewed"
     
+def numInput(prompt):
+    while True:
+        user_input = input(prompt)
+        try:
+            value = int(user_input)
+            return value
+        except:
+            print('Invalid input...please enter a numerical value')
+
 
 def main():
     connection = sqlite3.connect('example.db')
@@ -131,15 +140,15 @@ def main():
         choice = input('Enter the corresponding number to choose an action: ')
         if choice == '1':
             A_name = input('Enter account name: ')
-            A_balance = int(input('Enter account balance: '))
+            A_balance = numInput('Enter account balance: ')
             create_account(A_name,A_balance)
         elif choice == '2':
-            A_id = int(input('Enter account id: '))
-            A_amount = int(input('Enter deposit amount: '))
+            A_id = numInput('Enter account id: ')
+            A_amount = numInput('Enter deposit amount: ')
             print(deposit(A_id, A_amount))
         elif choice == '3':
-            A_id = int(input('Enter account id: '))
-            A_amount = int(input('Enter withdraw amount: '))
+            A_id = numInput('Enter account id: ')
+            A_amount = numInput('Enter withdraw amount: ')
             print(withdraw(A_id, A_amount))
         elif choice == '4':
             view()
