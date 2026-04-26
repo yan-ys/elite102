@@ -118,7 +118,7 @@ def numInput(prompt):
         user_input = input(prompt)
         try:
             value = int(user_input)
-            return user_input
+            return value
         except:
             print('Invalid input...please enter a numerical value')
 
